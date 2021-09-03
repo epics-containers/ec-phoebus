@@ -27,8 +27,11 @@ RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     default-jdk \
     libc-dev-bin \
+    libopenjfx-jni \
+    libopenjfx-java \
     locales \
     maven \
+    openjfx \
     python3-pip \
     python3.8-minimal \
     busybox-static \
