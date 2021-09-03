@@ -48,6 +48,10 @@ RUN git clone https://github.com/ControlSystemStudio/phoebus.git ${PHOEBUS_DIR} 
 RUN locale-gen en_US.UTF-8 && \
     mvn clean install
 
+
+RUN bash -c "ln -s phoebus-product/target/product-*-SNAPSHOT.jar product.jar"
+ENTRYPOINT ["java", "-jar", "/phoebus/product.jar", "-server", "4918"]
+
 USER ${USERNAME}
 
 ##### runtime stage ############################################################
