@@ -48,3 +48,11 @@ RUN locale-gen en_US.UTF-8 && \
     mvn clean install
 
 USER ${USERNAME}
+
+##### runtime stage ############################################################
+
+FROM environment AS runtime
+
+# TODO copy build output
+
+USER ${USERNAME}
