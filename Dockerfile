@@ -6,9 +6,9 @@
 
 ##### shared environment stage #################################################
 ARG REGISTRY=ghcr.io/epics-containers
-ARG EPICS_VERSION=7.0.5r3.0
+ARG EPICS_VERSION=7.0.7ec2
 
-FROM ${REGISTRY}/epics-base:${EPICS_VERSION} AS environment
+FROM ${REGISTRY}/epics-base-linux-developer:${EPICS_VERSION} AS environment
 
 # environment
 ENV PHOEBUS_DIR=/phoebus
@@ -33,8 +33,6 @@ RUN apt-get update && apt-get upgrade -y && \
     locales \
     maven \
     openjfx \
-    python3-pip \
-    python3.8-minimal \
     busybox-static \
     ssh \
     sudo \
@@ -52,11 +50,11 @@ RUN locale-gen en_US.UTF-8 && \
 RUN bash -c "ln -s phoebus-product/target/product-*-SNAPSHOT.jar product.jar"
 ENTRYPOINT ["java", "-jar", "/phoebus/product.jar", "-server", "4918"]
 
-USER ${USERNAME}
+# USER ${USERNAME}
 
 ##### runtime stage ############################################################
 
-FROM environment AS runtime
+# FROM environment AS runtime
 
 # TODO copy build output
 
