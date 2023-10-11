@@ -46,9 +46,6 @@ jobs:
           push: ${{ steps.tag.outputs.do_push }}
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.image_tag }}
-          target: developer
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
 
       # - name: Build runtime image
       #   uses: docker/build-push-action@v5
