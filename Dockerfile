@@ -22,10 +22,7 @@ WORKDIR /
 # get phoebus and dependencies
 RUN git clone https://github.com/ControlSystemStudio/phoebus.git
 WORKDIR /phoebus
-RUN mvn clean verify -f dependencies/pom.xml
-# All but first run can use -o for offline
-#
-mvn -DskipTests clean install
+RUN mvn -DskipTests clean install
 # (cd phoebus-product/target; java -jar product-*-SNAPSHOT.jar  --add-modules=ALL-SYSTEM )
 
 
