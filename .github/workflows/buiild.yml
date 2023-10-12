@@ -45,6 +45,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ steps.tag.outputs.do_push }}
           tags: |
+            ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.image_tag }}
 
       # - name: Build runtime image
