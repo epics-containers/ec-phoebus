@@ -1,6 +1,6 @@
 # Dockerfile for EPICS OPI PHoebus
-
 FROM ubuntu:20.04
+
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -17,14 +17,13 @@ RUN apt-get install -y \
     git
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
+ENV ROOT=/phoebus
+ENV VERSION=4.7.2
 
-WORKDIR /
-# get phoebus and dependencies
-RUN git clone https://github.com/ControlSystemStudio/phoebus.git
-WORKDIR /phoebus
+RUN git clone https://github.com/ControlSystemStudio/phoebus.git \
+    --branch=v${VERSION} ${ROOT}
+WORKDIR ${ROOT}
 RUN mvn -DskipTests clean install
-# (cd phoebus-product/target; java -jar product-*-SNAPSHOT.jar  --add-modules=ALL-SYSTEM )
 
-
-RUN bash -c "ln -s phoebus-product/target/product-*-SNAPSHOT.jar product.jar"
-ENTRYPOINT ["java", "-jar", "/phoebus/product.jar", "-server", "4918", "--add-modules=ALL-SYSTEM"]
+ENTRYPOINT ["java", "-jar", "phoebus-product/target/product-${VERSION}.jar", \
+    "-server", "4918", "--add-modules=ALL-SYSTEM"]
