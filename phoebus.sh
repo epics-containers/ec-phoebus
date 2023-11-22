@@ -36,4 +36,5 @@ mounts="
 "
 
 set -x
-$docker run ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest
+$docker run ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest "${@}"
+
