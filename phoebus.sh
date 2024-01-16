@@ -33,6 +33,7 @@ export MYHOME=/home/${USER}
 mounts="
 -v=/tmp:/tmp
 -v=${MYHOME}/.ssh:/root/.ssh
+-v=${MYHOME}:/homedir
 "
 
 set -x
