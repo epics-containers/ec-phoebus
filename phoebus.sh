@@ -30,12 +30,12 @@ args=${args}"
 "
 
 export MYHOME=/home/${USER}
+# mount in your own home dir in same folder for access to external files
 mounts="
 -v=/tmp:/tmp
 -v=${MYHOME}/.ssh:/root/.ssh
--v=${MYHOME}:/homedir
+-v=${MYHOME}:${MYHOME}
 "
 
 set -x
 $docker run ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest "${@}"
-
