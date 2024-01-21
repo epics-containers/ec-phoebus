@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE preferences SYSTEM "http://java.sun.com/dtd/preferences.dtd">
+<preferences EXTERNAL_XML_VERSION="1.0">
+    <root type="user">
+        <map />
+        <node name="org">
+            <map />
+            <node name="phoebus">
+                <map />
+                <node name="applications">
+                    <map />
+                    <node name="alarm">
+                        <map />
+                        <node name="logging">
+                            <map />
+                            <node name="ui">
+                                <map />
+                            </node>
+                        </node>
+                    </node>
+                    <node name="filebrowser">
+                        <map />
+                    </node>
+                    <node name="update">
+                        <map />
+                    </node>
+                </node>
+                <node name="channelfinder">
+                    <map />
+                </node>
+                <node name="email">
+                    <map />
+                </node>
+                <node name="framework">
+                    <map />
+                    <node name="workbench">
+                        <map />
+                    </node>
+                </node>
+                <node name="logbook">
+                    <map />
+                    <node name="olog">
+                        <map />
+                        <node name="ui">
+                            <map />
+                        </node>
+                    </node>
+                </node>
+                <node name="security">
+                    <map />
+                </node>
+                <node name="ui">
+                    <map />
+                </node>
+            </node>
+        </node>
+    </root>
+</preferences>
