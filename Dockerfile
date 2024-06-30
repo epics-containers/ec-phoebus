@@ -17,7 +17,7 @@ RUN apt-get install -y \
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 ENV ROOT=/phoebus
-ENV VERSION=4.7.2
+ENV VERSION=4.7.3
 
 RUN git clone https://github.com/ControlSystemStudio/phoebus.git \
     --branch=v${VERSION} ${ROOT}
