@@ -39,8 +39,7 @@ FROM common as runtime
 
     RUN apt-get install -y \
         openjdk-11-jre \
-        openjfx \
-        git
+        openjfx
 
     COPY --from=build ${TARGET}/product-${VERSION}.jar ${TARGET}/phoebus.jar
     COPY --from=build ${TARGET}/lib ${ROOT}/${TARGET}/lib
