@@ -12,7 +12,7 @@ FROM ubuntu:20.04 as common
     ENV LANG en_US.UTF-8
     ENV ROOT=/phoebus
     ENV VERSION=4.7.3
-    ENV TARGET=phoebus-product/target
+    ENV TARGET=${ROOT}/phoebus-product/target
     WORKDIR ${ROOT}
 
 FROM common as build
@@ -42,7 +42,7 @@ FROM common as runtime
         openjfx
 
     COPY --from=build ${TARGET}/product-${VERSION}.jar ${TARGET}/phoebus.jar
-    COPY --from=build ${TARGET}/lib ${ROOT}/${TARGET}/lib
+    COPY --from=build ${TARGET}/lib ${TARGET}/lib
     COPY --from=build /settings /settings
     RUN ln -s ${TARGET}/phoebus.jar phoebus.jar
 
