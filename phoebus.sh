@@ -27,6 +27,8 @@ x11="
 
 args=${args}"
 -it
+--pull newer
+--workdir /workspace
 "
 
 export MYHOME=/home/${USER}
@@ -44,4 +46,5 @@ if [[ -f ${thisdir}/settings.ini ]]; then
 fi
 
 set -x
-$docker run --pull=newer ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest -settings /settings/settings.ini -server 4918 -add-modules=ALL-SYSTEM "${@}"
+$docker run ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest \
+  -settings /settings/settings.ini -server 4918 -add-modules=ALL-SYSTEM "${@}"

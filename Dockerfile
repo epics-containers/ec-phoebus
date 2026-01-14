@@ -43,5 +43,5 @@ FROM common as runtime
     COPY --from=build /settings /settings
     RUN ln -s ${TARGET}/phoebus.jar phoebus.jar
 
-    ENTRYPOINT ["java", "-jar", "phoebus.jar"]
+    ENTRYPOINT ["java", "-jar", "/phoebus/phoebus.jar"]
     CMD ["-settings=/settings/settings.ini", "-server", "4918", "-add-modules=ALL-SYSTEM"]
