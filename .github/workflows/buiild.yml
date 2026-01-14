@@ -1,4 +1,4 @@
-name:  Build and publish image to ghcr.io/epics-containers
+name: Build and publish image to ghcr.io/epics-containers
 
 on:
   push:
@@ -45,17 +45,18 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ steps.tag.outputs.do_push }}
           tags: |
-            ghcr.io/${{ github.repository }}:latest
             ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.image_tag }}
+          cache-from: type=gha,scope=build
+          cache-to: type=gha,mode=max,scope=build
 
-      # - name: Build runtime image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     builder: ${{ steps.buildx.outputs.name }}
-      #     push: ${{ steps.tag.outputs.do_push }}
-      #     tags: |
-      #       ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.image_tag }}.run
-      #     target: runtime
-      #     cache-from: type=local,src=/tmp/.buildx-cache
-      #     cache-to: type=local,dest=/tmp/.buildx-cache
-
+      - name: Build runtime image
+        uses: docker/build-push-action@v5
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          push: ${{ steps.tag.outputs.do_push }}
+          tags: |
+            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.image_tag }}.runtime
+          target: runtime
+          cache-from: type=gha,scope=build
+          cache-to: type=gha,mode=max,scope=build
