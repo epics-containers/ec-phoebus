@@ -35,7 +35,13 @@ mounts="
 -v=/tmp:/tmp
 -v=${MYHOME}/.ssh:/root/.ssh
 -v=${MYHOME}:${MYHOME}
+-v=${thisdir}:/workspace
 "
 
+# if there is a settings.ini next to this script mount it over the default one
+if [[ -f ${thisdir}/settings.ini ]]; then
+    mounts+="-v=${thisdir}/settings.ini:/settings/settings.ini"
+fi
+
 set -x
-$docker run ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest "${@}"
+$docker run ${mounts} ${args} ${x11} ghcr.io/epics-containers/ec-phoebus:latest -settings /settings/settings.ini -server 4918 -add-modules=ALL-SYSTEM "${@}"

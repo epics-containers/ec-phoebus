@@ -26,9 +26,6 @@ FROM common as build
     RUN git clone https://github.com/ControlSystemStudio/phoebus.git \
         --branch=v${VERSION} ${ROOT}
 
-    # CANNOT work out how to do this in a -settings settings.xml launch config - meh
-    RUN sed -i 's|colors_list=|colors_list=/settings/colors.list|' app/display/convert-edm/src/main/resources/edm_converter_preferences.properties
-
     RUN mvn -DskipTests clean install
 
     RUN ln -s ${TARGET}/product-${VERSION}.jar phoebus.jar
@@ -46,4 +43,5 @@ FROM common as runtime
     COPY --from=build /settings /settings
     RUN ln -s ${TARGET}/phoebus.jar phoebus.jar
 
-    ENTRYPOINT ["java", "-jar", "phoebus.jar",  "-settings=/settings/settings.ini", "-server", "4918", "--add-modules=ALL-SYSTEM"]
+    ENTRYPOINT ["java", "-jar", "phoebus.jar"]
+    CMD ["-settings=/settings/settings.ini", "-server", "4918", "-add-modules=ALL-SYSTEM"]
