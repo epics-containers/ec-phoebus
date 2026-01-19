@@ -1,16 +1,12 @@
-
 #!/bin/bash
 
 # A launcher for the phoebus container that allows X11 forwarding
 
-thisdir=$(realpath $(dirname ${BASH_SOURCE[0]}))
+thisdir=$(realpath $(dirname ${0}))
 
-if [[ $(docker --version 2>/dev/null) == *Docker* ]]; then
-    docker=docker
-else
-    docker=podman
-    args="--security-opt=label=type:container_runtime_t"
-fi
+# assume podman for now - change this to docker if needed
+docker=podman
+args="--security-opt=label=type:container_runtime_t"
 
 XSOCK=/tmp/.X11-unix # X11 socket (but we mount the whole of tmp)
 XAUTH=/tmp/.container.xauth.$USER
