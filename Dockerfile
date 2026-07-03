@@ -1,5 +1,6 @@
 # Dockerfile for EPICS OPI PHoebus
-FROM ubuntu:24.04 as common
+
+FROM ubuntu:26.04 as common
 
     ENV DEBIAN_FRONTEND=noninteractive
 
@@ -8,17 +9,17 @@ FROM ubuntu:24.04 as common
         dpkg-reconfigure --frontend=noninteractive locales && \
         update-locale LANG=en_US.UTF-8
 
-    ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+    ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64/
     ENV LANG en_US.UTF-8
     ENV ROOT=/phoebus
-    ENV VERSION=5.0.2
+    ENV VERSION=5.0.5
     ENV TARGET=${ROOT}/phoebus-product/target
     WORKDIR ${ROOT}
 
 FROM common as build
 
     RUN apt-get install -y \
-        openjdk-17-jdk \
+        openjdk-21-jdk \
         maven \
         openjfx \
         git
@@ -35,7 +36,7 @@ FROM common as build
 FROM common as runtime
 
     RUN apt-get install -y \
-        openjdk-17-jre \
+        openjdk-21-jre \
         openjfx
 
     COPY --from=build ${TARGET}/product-${VERSION}.jar ${TARGET}/phoebus.jar
