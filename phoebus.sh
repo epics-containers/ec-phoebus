@@ -41,8 +41,13 @@ mounts="
 # so this works without tzdata in the image. Also mount /etc/localtime for
 # anything else in the container that reads it.
 host_tz=${TZ:-$(timedatectl show -p Timezone --value 2>/dev/null)}
-if [[ -z ${host_tz} && -L /etc/localtime ]]; then
-    host_tz=$(readlink -f /etc/localtime | sed -n 's|.*/zoneinfo/||p')
+if [[ -z ${host_tz} ]]; then
+    if [[ -L /etc/localtime ]]; then
+        host_tz=$(readlink -f /etc/localtime | sed -n 's|.*/zoneinfo/||p')
+    elif [[ -r /etc/timezone ]]; then
+        # /etc/localtime is a plain copy: use the zone name Debian/Ubuntu keep here
+        host_tz=$(head -n 1 /etc/timezone)
+    fi
 fi
 if [[ -n ${host_tz} ]]; then
     args+="
