@@ -35,6 +35,26 @@ mounts="
 -v=${thisdir}:/workspace
 "
 
+# use the host's time zone so that times (e.g. data browser plot axes) are
+# local rather than the container's default of UTC. Java reads the TZ
+# environment variable first and resolves zone names from its own tz database,
+# so this works without tzdata in the image. Also mount /etc/localtime for
+# anything else in the container that reads it.
+host_tz=${TZ:-$(timedatectl show -p Timezone --value 2>/dev/null)}
+if [[ -z ${host_tz} && -L /etc/localtime ]]; then
+    host_tz=$(readlink -f /etc/localtime | sed -n 's|.*/zoneinfo/||p')
+fi
+if [[ -n ${host_tz} ]]; then
+    args+="
+-e TZ=${host_tz}
+"
+fi
+if [[ -e /etc/localtime ]]; then
+    mounts+="
+-v=/etc/localtime:/etc/localtime:ro
+"
+fi
+
 # if there is a settings.ini next to this script mount it over the default one
 if [[ -f ${thisdir}/settings.ini ]]; then
     mounts+="-v=${thisdir}/settings.ini:/settings/settings.ini"
