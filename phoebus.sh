@@ -52,12 +52,10 @@ if [[ -n ${host_tz} ]]; then
     args+="
 -e TZ=${host_tz}
 "
-elif [[ ${docker} == podman ]]; then
-    # no zone name found: let podman copy the host's /etc/localtime correctly
-    args+="
---tz=local
-"
 else
+    # no zone name found. (podman --tz=local is no help: like a bind mount it
+    # replaces the file behind the image's /etc/localtime symlink, and the JDK
+    # takes the zone from the symlink's name, so it would still show UTC.)
     echo "WARNING: could not determine the host time zone, times will be UTC." \
         "Run with e.g. TZ=Europe/London bash ${0}" >&2
 fi
