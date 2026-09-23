@@ -28,8 +28,9 @@ org.phoebus.pv.pva/epics_pva_name_servers=127.0.0.1
 
 ## Time zone
 
-`phoebus.sh` passes the host's time zone into the container (as `TZ`, taken from
-`$TZ`, `timedatectl`, the `/etc/localtime` symlink or `/etc/timezone`, and by mounting
-`/etc/localtime`), so data browser plots show local time rather than UTC. To use
-a different zone, set it when launching, e.g. `TZ=Europe/Ljubljana bash phoebus.sh`.
+`phoebus.sh` passes the host's time zone into the container as `TZ`, taken from
+`$TZ`, `timedatectl`, the `/etc/localtime` symlink or `/etc/timezone` (if none of
+these gives a zone name it falls back to podman's `--tz=local`), so data browser
+plots show local time rather than UTC. To use a different zone, set it when
+launching, e.g. `TZ=Europe/Ljubljana bash phoebus.sh`.
 If you run the image without the script, add `-e TZ=<zone>` yourself.

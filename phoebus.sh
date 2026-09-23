@@ -37,27 +37,29 @@ mounts="
 
 # use the host's time zone so that times (e.g. data browser plot axes) are
 # local rather than the container's default of UTC. Java reads the TZ
-# environment variable first and resolves zone names from its own tz database,
-# so this works without tzdata in the image. Also mount /etc/localtime for
-# anything else in the container that reads it.
+# environment variable first and resolves zone names from its own tz database.
+# (Bind-mounting /etc/localtime does not help Java: in the image it is a
+# symlink, so the mount lands on its target and the JDK still reads Etc/UTC.)
 host_tz=${TZ:-$(timedatectl show -p Timezone --value 2>/dev/null)}
-if [[ -z ${host_tz} ]]; then
-    if [[ -L /etc/localtime ]]; then
-        host_tz=$(readlink -f /etc/localtime | sed -n 's|.*/zoneinfo/||p')
-    elif [[ -r /etc/timezone ]]; then
-        # /etc/localtime is a plain copy: use the zone name Debian/Ubuntu keep here
-        host_tz=$(head -n 1 /etc/timezone)
-    fi
+if [[ -z ${host_tz} && -L /etc/localtime ]]; then
+    host_tz=$(readlink -f /etc/localtime | sed -n 's|.*/zoneinfo/||p')
+fi
+if [[ -z ${host_tz} && -r /etc/timezone ]]; then
+    # the zone name Debian/Ubuntu keep alongside /etc/localtime
+    host_tz=$(head -n 1 /etc/timezone)
 fi
 if [[ -n ${host_tz} ]]; then
     args+="
 -e TZ=${host_tz}
 "
-fi
-if [[ -e /etc/localtime ]]; then
-    mounts+="
--v=/etc/localtime:/etc/localtime:ro
+elif [[ ${docker} == podman ]]; then
+    # no zone name found: let podman copy the host's /etc/localtime correctly
+    args+="
+--tz=local
 "
+else
+    echo "WARNING: could not determine the host time zone, times will be UTC." \
+        "Run with e.g. TZ=Europe/London bash ${0}" >&2
 fi
 
 # if there is a settings.ini next to this script mount it over the default one
