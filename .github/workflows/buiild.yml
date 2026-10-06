@@ -17,8 +17,14 @@ jobs:
         id: tag
         run: |
           # tag is branch name or tag if there is a tag
-          echo ::set-output name=image_tag::${GITHUB_REF##*/}
-          echo ::set-output name=do_push::true
+          echo "image_tag=${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
+          # only publish on push events - a pull request must build but not push
+          echo "do_push=${{ github.event_name == 'push' }}" >> "$GITHUB_OUTPUT"
+          # :latest only ever tracks the default branch or a release tag
+          if [[ ${GITHUB_REF} == refs/tags/* ||
+                ${GITHUB_REF} == refs/heads/${{ github.event.repository.default_branch }} ]]; then
+            echo "latest=ghcr.io/${{ github.repository }}:latest" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Cache Docker layers
         uses: actions/cache@v3
@@ -55,7 +61,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           push: ${{ steps.tag.outputs.do_push }}
           tags: |
-            ghcr.io/${{ github.repository }}:latest
+            ${{ steps.tag.outputs.latest }}
             ghcr.io/${{ github.repository }}:${{ steps.tag.outputs.image_tag }}.runtime
           target: runtime
           cache-from: type=gha,scope=build
